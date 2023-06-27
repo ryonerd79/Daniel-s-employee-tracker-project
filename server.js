@@ -39,9 +39,9 @@ const app = async() => {
     console.log(answers)
     if (answers['main menu'] === 'view all departments') {
       // query.then( departments => do something here, like log it, and then run the whole function again to go back to the start)
-      console.log('i am here')
       const department = query('SELECT * from department').then(d => console.log(d)).catch(err => console.log(err))
       console.table(department);
+      query().then(res => console.log(res));
     } else if (answers['main menu'] === 'view all roles') {
       const role = query('SELECT * from role').then(d => console.log(d)).catch(err => console.log(err))
       console.table(role);
