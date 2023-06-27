@@ -10,7 +10,7 @@ VALUES ("Sales"),
         ("debugging", 67000, 3),
         ("case application", 60000, 4);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_name)
 VALUES ("Daniel", "Roh", 2, null),
        ("Steven", "Schrimmer", 3, "Daniel Roh"),
        ("Dustin", "Bonilla", 3, "Steven Schrimmer"),

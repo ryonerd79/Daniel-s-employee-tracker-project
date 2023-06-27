@@ -106,7 +106,7 @@ const employeesNewRole = [
     name: 'New Role for Employee',
     message: 'What is the new role for the employee?',
 }
-]
+];
 
 const app = async() => {
   const answers = await prompt(menu)
@@ -139,17 +139,24 @@ const app = async() => {
       if(err) throw err;
       console.table(result);
       app();
-    })}
-    } /*else if (answers['main menu'] === 'add a department') {
+    })};
+    } else if (answers['main menu'] === 'add a department') {
       addDepartment();
       function addDepartment {
-      
-      db.query('SELECT * from department', function (err, result){
+       inquirer.prompt(newDep)
+         db.query(fs.writeFile('INSERT INTO department (department_name) VALUES("Web Development")', function (err, result){
+          if(err) throw err;
+          console.table(result);
+          app();
+         }))
+       } 
+      }
+      /*db.query('SELECT * from department', function (err, result){
       if(err) throw err;
       console.table(result);
       app();
-    })}
-    }*/ /*else if (answers['main menu'] === 'add a department') {
+    })*/
+     /*else if (answers['main menu'] === 'add a department') {
       addDepartment();
       function addDepartment {
       
