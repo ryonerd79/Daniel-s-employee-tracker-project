@@ -12,6 +12,6 @@ VALUES ("Sales"),
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Daniel", "Roh", 2, null),
-       ("Steven", "Schrimmer", 3, 1),
-       ("Dustin", "Bonilla", 3, 1),
-       ("Luke", "DenHartog", 3, 2);
+       ("Steven", "Schrimmer", 3, "Daniel Roh"),
+       ("Dustin", "Bonilla", 3, "Steven Schrimmer"),
+       ("Luke", "DenHartog", 3, "Dustin Bonilla");
