@@ -170,7 +170,7 @@ const app = async() => {
       updateRole();
       async function updateRole() {
       const newRoleResponse = await prompt(employeesNewRole)
-      db.query('UPDATE employee SET role_id = ?', newRoleResponse['Which employee'], 'WHERE id = ?', ['choose the following'], function (err, result) {
+      db.query('UPDATE employee SET role_id = ?', newRoleResponse, 'WHERE id = ?', ['choose the following'], function (err, result) {
       if(err) throw err;
       viewEmployee();
       app();
