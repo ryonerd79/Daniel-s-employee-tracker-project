@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const { prompt } = require('inquirer');
 const util = require('util');
 const { type } = require('os');
+const { table } = require('console');
 const db = mysql.createConnection(
   {
     host: 'localhost',
@@ -20,6 +21,7 @@ db.connect((err) => {
 const query = util.promisify(db.query).bind(db);
 db.query('query', (err, data) => {
 });
+
 const menu = [
   {
     type: 'list',
@@ -121,7 +123,7 @@ const employeesNewRole = [
 ];
 
 function viewDepartmemt() {
-
+  
   db.query('SELECT * from department', function (err, result) {
     if (err) throw err;
     console.table(result);
@@ -153,8 +155,8 @@ async function addDepartment() {
 
   db.query('INSERT INTO department (department_name) VALUES(?)', newDepartmentResponse['New Department'], function (err, result) {
     if (err) throw err;
-    viewDepartmemt();
-    app();
+    viewDepartmemt(result);
+    
   })
 };
 
@@ -168,8 +170,8 @@ async function addRole() {
     ]
   db.query('INSERT INTO role (title, salary, department_id) VALUES(?, ?, ?)', values, function (err, result) {
     if (err) throw err;
-    viewRole();
-    app();
+    viewRole(result);
+    
   })
 };
 
@@ -183,8 +185,8 @@ async function addEmployee() {
     ]
   db.query('INSERT INTO employee (first_name, last_name, role_id, manager_name) VALUES(?, ?, ?, ?)', values, function (err, result){
   if(err) throw err;
-  viewEmployee();
-  app();
+  viewEmployee(result);
+  
  })
 };
 
@@ -198,19 +200,19 @@ async function updateRole() {
 
   db.query(query, params, function (err, result) {
     if (err) throw err;
-    viewEmployee();
-    app();
+    viewEmployee(result);
+    
   })
 };
 
 
 const app = async () => {
   const answers = await prompt(menu)
-
+  
   
   if (answers['main menu'] === 'view all departments') {
     viewDepartmemt();
-
+    
   } else if (answers['main menu'] === 'view all roles') {
     viewRole();
 
