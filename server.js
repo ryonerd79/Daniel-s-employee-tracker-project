@@ -111,7 +111,7 @@ const employeesNewRole = [
 const app = async() => {
   const answers = await prompt(menu)
    
-    console.log(answers)
+    console.log(answers['main menu'])
     if (answers['main menu'] === 'view all departments') {
       viewDepartmemt();
       function viewDepartmemt() {
@@ -125,7 +125,7 @@ const app = async() => {
       viewRole();
       function viewRole() {
       
-      db.query('SELECT * from roles', function (err, result){
+      db.query('SELECT * from role', function (err, result){
       if(err) throw err;
       console.table(result);
       app();
@@ -135,27 +135,24 @@ const app = async() => {
       viewEmployee();
       function viewEmployee() {
       
-      db.query('SELECT * from employees', function (err, result){
+      db.query('SELECT * from employee', function (err, result){
       if(err) throw err;
       console.table(result);
       app();
     })};
     } else if (answers['main menu'] === 'add a department') {
-      addDepartment();
-      function addDepartment {
-       inquirer.prompt(newDep)
-         db.query(fs.writeFile('INSERT INTO department (department_name) VALUES("Web Development")', function (err, result){
+       addDepartment();
+       async function addDepartment() {
+        const newDepartmentResponse = await prompt(newDep)
+
+         db.query('SELECT * from department', function (err, result) {
           if(err) throw err;
           console.table(result);
           app();
-         }))
+         })
        } 
       }
-      /*db.query('SELECT * from department', function (err, result){
-      if(err) throw err;
-      console.table(result);
-      app();
-    })*/
+      
      /*else if (answers['main menu'] === 'add a department') {
       addDepartment();
       function addDepartment {
