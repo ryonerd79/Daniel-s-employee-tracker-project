@@ -135,6 +135,15 @@ function viewEmployee() {
   app();
 })};
 
+function viewRole() {
+      
+  db.query('SELECT * from role', function (err, result){
+  if(err) throw err;
+  console.table(result);
+  app();
+  
+})};
+
 const app = async() => {
   const answers = await prompt(menu)
    
@@ -144,14 +153,7 @@ const app = async() => {
       
     } else if (answers['main menu'] === 'view all roles') {
       viewRole();
-      function viewRole() {
       
-      db.query('SELECT * from role', function (err, result){
-      if(err) throw err;
-      console.table(result);
-      app();
-      
-    })}
     } else if (answers['main menu'] === 'view all employees') {
       viewEmployee();
       
@@ -169,26 +171,33 @@ const app = async() => {
       } else if (answers['main menu'] === 'update an employee role') {
       updateRole();
       async function updateRole() {
-      const newRoleResponse = await prompt(employeesNewRole)
-      db.query('UPDATE employee SET role_id = ?', newRoleResponse, 'WHERE id = ?', ['choose the following'], function (err, result) {
+        const newRoleResponse = await prompt(employeesNewRole);
+        const employeeName = newRoleResponse['Which employee'];
+        const newRoleId = newRoleResponse['New Role for Employee'];
+      
+        const query = 'UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?';
+        const params = [newRoleId, employeeName.split(' ')[0], employeeName.split(' ')[1]];
+      
+        db.query(query, params, function (err, result) {
+          if (err) throw err;
+          viewEmployee();
+          app();
+        })
+    }
+    } else if (answers['main menu'] === 'add a role') {
+      addRole();
+      async function addRole() {
+      const addRoleResponse = await prompt(newRole)
+      db.query('INSERT INTO role (title, salary, department_id) VALUES(?)', addRoleResponse['New Role'], addRoleResponse['Salary'], addRoleResponse['department_id'], function (err, result){
       if(err) throw err;
-      viewEmployee();
+      viewRole();
       app();
     })}
-    } /*else if (answers['main menu'] === 'add a department') {
-      addDepartment();
-      function addDepartment {
-      
-      db.query('SELECT * from department', function (err, result){
-      if(err) throw err;
-      console.table(result);
-      app();
-    })}
-    }*/ /*else if (answers['main menu'] === 'add a department') {
-      addDepartment();
-      function addDepartment {
-      
-      db.query('SELECT * from department', function (err, result){
+    } /*else if (answers['main menu'] === 'add a employee') {
+      addEmployee();
+      async function addEmployee() {
+      const addEmployeeResponse = await prompt(addEmployeeResponse)
+      db.query('INSERT INTO employee (first_name, last_name, role_id, manager_name) VALUES(?)', addEmployeeResponse['New '] function (err, result){
       if(err) throw err;
       console.table(result);
       app();
