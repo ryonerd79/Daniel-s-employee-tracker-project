@@ -47,11 +47,11 @@ const newDep = [
   }
 ];
 
-const newRole = [
+const newRol = [
   {
     type: 'input',
     name: 'New Role',
-    message: 'What new Role would you like to create?',
+    message: 'What new Role would you like to create'
 
   },
 
@@ -171,26 +171,10 @@ const app = async () => {
         app();
       })
     }
-  } else if (answers['main menu'] === 'update an employee role') {
-    updateRole();
-    async function updateRole() {
-      const newRoleResponse = await prompt(employeesNewRole);
-      const employeeName = newRoleResponse['Which employee'];
-      const newRoleId = newRoleResponse['New Role for Employee'];
-
-      const query = 'UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?';
-      const params = [newRoleId, employeeName.split(' ')[0], employeeName.split(' ')[1]];
-
-      db.query(query, params, function (err, result) {
-        if (err) throw err;
-        viewEmployee();
-        app();
-      })
-    }
-  } else if (answers['main menu'] === 'add a role') {
+  }  else if (answers['main menu'] === 'add a role') {
     addRole();
     async function addRole() {
-      const addRoleResponse = await prompt(newRole)
+      const addRoleResponse = await prompt(newRol)
 
       let values = [
         addRoleResponse['New Role'],
@@ -218,8 +202,24 @@ const app = async () => {
       viewEmployee();
       app();
     })}
+    } else if (answers['main menu'] === 'update an employee role') {
+      updateRole();
+      async function updateRole() {
+        const newRoleResponse = await prompt(employeesNewRole);
+        const employeeName = newRoleResponse['Which employee'];
+        const newRoleId = newRoleResponse['New Role for Employee'];
+  
+        const query = 'UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?';
+        const params = [newRoleId, employeeName.split(' ')[0], employeeName.split(' ')[1]];
+  
+        db.query(query, params, function (err, result) {
+          if (err) throw err;
+          viewEmployee();
+          app();
+        })
+      }
     }
-}
+};
 
 
 
