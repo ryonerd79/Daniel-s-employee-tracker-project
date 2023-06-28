@@ -105,6 +105,18 @@ const employeesNewRole = [
     type: 'input',
     name: 'New Role for Employee',
     message: 'What is the new role for the employee?',
+},
+
+  {
+    type: 'list',
+    name: 'Which employee',
+    message: 'choose the following',
+    choices: [
+      "Daniel Roh",
+      "Steven Schrimmer",
+      "Dustin Bonilla",
+      "Luke DenHartog"
+    ]
 }
 ];
 function viewDepartmemt() {
@@ -158,7 +170,7 @@ const app = async() => {
       updateRole();
       async function updateRole() {
       const newRoleResponse = await prompt(employeesNewRole)
-      db.query('UPDATE employee SET role_id = ?', newRoleResponse['New Role for Employee'], 'WHERE id = VALUES(?)', function (err, result) {
+      db.query('UPDATE employee SET role_id = ?', newRoleResponse['Which employee'], 'WHERE id = ?', ['choose the following'], function (err, result) {
       if(err) throw err;
       viewEmployee();
       app();
