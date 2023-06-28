@@ -119,18 +119,10 @@ const employeesNewRole = [
     ]
   }
 ];
+
 function viewDepartmemt() {
 
   db.query('SELECT * from department', function (err, result) {
-    if (err) throw err;
-    console.table(result);
-    app();
-  })
-};
-
-function viewEmployee() {
-
-  db.query('SELECT * from employee', function (err, result) {
     if (err) throw err;
     console.table(result);
     app();
@@ -147,10 +139,75 @@ function viewRole() {
   })
 };
 
+function viewEmployee() {
+
+  db.query('SELECT * from employee', function (err, result) {
+    if (err) throw err;
+    console.table(result);
+    app();
+  })
+};
+
+async function addDepartment() {
+  const newDepartmentResponse = await prompt(newDep)
+
+  db.query('INSERT INTO department (department_name) VALUES(?)', newDepartmentResponse['New Department'], function (err, result) {
+    if (err) throw err;
+    viewDepartmemt();
+    app();
+  })
+};
+
+async function addRole() {
+  const addRoleResponse = await prompt(newRol)
+
+  let values = [
+    addRoleResponse['New Role'],
+    addRoleResponse['Salary'],
+    addRoleResponse['department id']
+    ]
+  db.query('INSERT INTO role (title, salary, department_id) VALUES(?, ?, ?)', values, function (err, result) {
+    if (err) throw err;
+    viewRole();
+    app();
+  })
+};
+
+async function addEmployee() {
+  const addEmployeeResponse = await prompt(newEmployee)
+  let values = [
+    addEmployeeResponse['first name'],
+    addEmployeeResponse['last name'],
+    addEmployeeResponse['role id'],
+    addEmployeeResponse['manager-s-name']
+    ]
+  db.query('INSERT INTO employee (first_name, last_name, role_id, manager_name) VALUES(?, ?, ?, ?)', values, function (err, result){
+  if(err) throw err;
+  viewEmployee();
+  app();
+ })
+};
+
+async function updateRole() {
+  const newRoleResponse = await prompt(employeesNewRole);
+  const employeeName = newRoleResponse['Which employee'];
+  const newRoleId = newRoleResponse['New Role for Employee'];
+
+  const query = 'UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?';
+  const params = [newRoleId, employeeName.split(' ')[0], employeeName.split(' ')[1]];
+
+  db.query(query, params, function (err, result) {
+    if (err) throw err;
+    viewEmployee();
+    app();
+  })
+};
+
+
 const app = async () => {
   const answers = await prompt(menu)
 
-  console.log(answers['main menu'])
+  
   if (answers['main menu'] === 'view all departments') {
     viewDepartmemt();
 
@@ -162,63 +219,17 @@ const app = async () => {
 
   } else if (answers['main menu'] === 'add a department') {
     addDepartment();
-    async function addDepartment() {
-      const newDepartmentResponse = await prompt(newDep)
-
-      db.query('INSERT INTO department (department_name) VALUES(?)', newDepartmentResponse['New Department'], function (err, result) {
-        if (err) throw err;
-        viewDepartmemt();
-        app();
-      })
-    }
-  }  else if (answers['main menu'] === 'add a role') {
+    
+  } else if (answers['main menu'] === 'add a role') {
     addRole();
-    async function addRole() {
-      const addRoleResponse = await prompt(newRol)
-
-      let values = [
-        addRoleResponse['New Role'],
-        addRoleResponse['Salary'],
-        addRoleResponse['department id']
-        ]
-      db.query('INSERT INTO role (title, salary, department_id) VALUES(?, ?, ?)', values, function (err, result) {
-        if (err) throw err;
-        viewRole();
-        app();
-      })
-    }
+    
   } else if (answers['main menu'] === 'add a employee') {
-      addEmployee();
-      async function addEmployee() {
-      const addEmployeeResponse = await prompt(newEmployee)
-      let values = [
-        addEmployeeResponse['first name'],
-        addEmployeeResponse['last name'],
-        addEmployeeResponse['role id'],
-        addEmployeeResponse['manager-s-name']
-        ]
-      db.query('INSERT INTO employee (first_name, last_name, role_id, manager_name) VALUES(?, ?, ?, ?)', values, function (err, result){
-      if(err) throw err;
-      viewEmployee();
-      app();
-    })}
-    } else if (answers['main menu'] === 'update an employee role') {
-      updateRole();
-      async function updateRole() {
-        const newRoleResponse = await prompt(employeesNewRole);
-        const employeeName = newRoleResponse['Which employee'];
-        const newRoleId = newRoleResponse['New Role for Employee'];
-  
-        const query = 'UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?';
-        const params = [newRoleId, employeeName.split(' ')[0], employeeName.split(' ')[1]];
-  
-        db.query(query, params, function (err, result) {
-          if (err) throw err;
-          viewEmployee();
-          app();
-        })
-      }
-    }
+    addEmployee();
+      
+  } else if (answers['main menu'] === 'update an employee role') {
+    updateRole();
+    
+  }
 };
 
 
