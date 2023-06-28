@@ -107,6 +107,21 @@ const employeesNewRole = [
     message: 'What is the new role for the employee?',
 }
 ];
+function viewDepartmemt() {
+      
+  db.query('SELECT * from department', function (err, result){
+  if(err) throw err;
+  console.table(result);
+  app();
+})};
+
+function viewEmployee() {
+      
+  db.query('SELECT * from employee', function (err, result){
+  if(err) throw err;
+  console.table(result);
+  app();
+})};
 
 const app = async() => {
   const answers = await prompt(menu)
@@ -114,13 +129,7 @@ const app = async() => {
     console.log(answers['main menu'])
     if (answers['main menu'] === 'view all departments') {
       viewDepartmemt();
-      function viewDepartmemt() {
       
-      db.query('SELECT * from department', function (err, result){
-      if(err) throw err;
-      console.table(result);
-      app();
-    })};
     } else if (answers['main menu'] === 'view all roles') {
       viewRole();
       function viewRole() {
@@ -133,36 +142,28 @@ const app = async() => {
     })}
     } else if (answers['main menu'] === 'view all employees') {
       viewEmployee();
-      function viewEmployee() {
       
-      db.query('SELECT * from employee', function (err, result){
-      if(err) throw err;
-      console.table(result);
-      app();
-    })};
     } else if (answers['main menu'] === 'add a department') {
        addDepartment();
        async function addDepartment() {
         const newDepartmentResponse = await prompt(newDep)
-
-         db.query('SELECT * from department', function (err, result) {
+          
+         db.query('INSERT INTO department (department_name) VALUES(?)', newDepartmentResponse['New Department'], function (err, result) {
           if(err) throw err;
-          console.table(result);
+          viewDepartmemt();
           app();
          })
        } 
-      }
-      
-     /*else if (answers['main menu'] === 'add a department') {
-      addDepartment();
-      function addDepartment {
-      
-      db.query('SELECT * from department', function (err, result){
+      } else if (answers['main menu'] === 'update an employee role') {
+      updateRole();
+      async function updateRole() {
+      const newRoleResponse = await prompt(employeesNewRole)
+      db.query('UPDATE employee SET role_id = ?', newRoleResponse['New Role for Employee'], 'WHERE id = VALUES(?)', function (err, result) {
       if(err) throw err;
-      console.table(result);
+      viewEmployee();
       app();
     })}
-    }*/ /*else if (answers['main menu'] === 'add a department') {
+    } /*else if (answers['main menu'] === 'add a department') {
       addDepartment();
       function addDepartment {
       
